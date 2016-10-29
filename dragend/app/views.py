@@ -1,6 +1,9 @@
 # coding: utf-8
 import os
 import sys
+import urllib2
+import urllib
+import json
 from . import app
 from flask import render_template, request, jsonify
 from flask_zero import Qiniu
@@ -38,6 +41,28 @@ def upload():
     else:
         return jsonify({'msg': 'please post the data'}), 405
 
+# @app.route('/oupload/', methods=['POST', 'GET'])
+# def oupload():
+#     """
+#     国外: 上传文件到 Imgur
+#     """
+#     if request.method == 'POST':
+#         fileobj = request.files['mypic']
+#         fileobj.save(os.path.join('/Users/apple/down/', fileobj.filename))
+#         os.system('imguru /Users/apple/down/' + fileobj.filename + ' > /Users/apple/log.log')
+#         with open('/Users/apple/log.log', 'r') as f:
+#             line = f.readline().strip()
+#         if len(line) == 0:
+#             return jsonify({
+#                 'msg': 'failed'
+#             }), 500
+#         else:
+#             return jsonify({
+#                 'url': line
+#             })
+#     else:
+#         return jsonify({'msg': 'please post the data'}), 405
+
 @app.route('/oupload/', methods=['POST', 'GET'])
 def oupload():
     """
@@ -45,17 +70,12 @@ def oupload():
     """
     if request.method == 'POST':
         fileobj = request.files['mypic']
-        fileobj.save(os.path.join('/Users/apple/down/', fileobj.filename))
-        os.system('imguru /Users/apple/down/' + fileobj.filename + ' > /Users/apple/log.log')
-        with open('/Users/apple/log.log', 'r') as f:
-            line = f.readline().strip()
-        if len(line) == 0:
-            return jsonify({
-                'msg': 'failed'
-            }), 500
-        else:
-            return jsonify({
-                'url': line
-            })
-    else:
-        return jsonify({'msg': 'please post the data'}), 405
+        urldata = urllib.urlencode({"image": fileobj.read()})
+        url = "https://api.imgur.com/3/upload"
+        r = urllib2.Request(url)
+        r.add_data(urldata)
+        r.add_header('Authorization', 'Client-ID 1c49486ec8e9565')
+        res = json.loads(urllib2.urlopen(r).read())
+        return jsonify({
+            'url': res['data']['link']
+        })
