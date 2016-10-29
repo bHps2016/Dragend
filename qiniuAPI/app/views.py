@@ -27,7 +27,7 @@ def config():
 @app.route('/upload/', methods=['POST', 'GET'])
 def upload():
     """
-    上传文件到七牛
+    国内: 上传文件到七牛
     """
     if request.method == 'POST':
         fileobj = request.files['mypic']
@@ -41,7 +41,7 @@ def upload():
 @app.route('/oupload/', methods=['POST', 'GET'])
 def oupload():
     """
-    上传文件到 Imgur
+    国外: 上传文件到 Imgur
     """
     if request.method == 'POST':
         fileobj = request.files['mypic']
@@ -49,9 +49,13 @@ def oupload():
         os.system('imguru /Users/apple/down/' + fileobj.filename + ' > /Users/apple/log.log')
         with open('/Users/apple/log.log', 'r') as f:
             line = f.readline().strip()
-
-        return jsonify({
-            'url': line
-        })
+        if len(line) == 0:
+            return jsonify({
+                'msg': 'failed'
+            }), 500
+        else:
+            return jsonify({
+                'url': line
+            })
     else:
         return jsonify({'msg': 'please post the data'}), 405
