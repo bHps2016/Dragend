@@ -45,10 +45,9 @@ def oupload():
     """
     if request.method == 'POST':
         fileobj = request.files['mypic']
-        with open('/test.png') as fileobj:
-            fileobj.save(os.path.join('/down/', fileobj.filename))
-            os.system('imguru /down/' + filename + ' > /log.log')
-        with open('/log.log') as f:
+        fileobj.save(os.path.join('/Users/apple/down/', fileobj.filename))
+        os.system('imguru /Users/apple/down/' + fileobj.filename + ' > /Users/apple/log.log')
+        with open('/Users/apple/log.log', 'r') as f:
             line = f.readline().strip()
 
         return jsonify({
