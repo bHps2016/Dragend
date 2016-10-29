@@ -10,4 +10,4 @@ app.config['QINIU_SECRET_KEY'] = "LpuwHp2mECopFk0oPpGbLyjU_tK5ggdwygr0F87r"
 app.config['QINIU_BUCKET_NAME'] = "neo1218"
 app.config['QINIU_BUCKET_DOMAIN'] = "7xj431.com1.z0.glb.clouddn.com"
 
-from . import views, forms
+from . import views

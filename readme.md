@@ -18,3 +18,17 @@
     + fileobj 上传的文件对象
 + return data:
     + 200 ok
+
+## Imgur 上传
++ 下载imguru:
+
+```
+wget http://downloads.rabien.com/imguru.tar.gz
+```
+
++ 新建过渡文件夹:
+
+```
+cd /
+mkdir down
+```

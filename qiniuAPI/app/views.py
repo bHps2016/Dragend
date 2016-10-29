@@ -1,4 +1,6 @@
 # coding: utf-8
+import os
+import sys
 from . import app
 from flask import render_template, request, jsonify
 from flask_zero import Qiniu
@@ -32,6 +34,25 @@ def upload():
         qiniu.save(fileobj, fileobj.filename)
         return jsonify({
             'url': qiniu.url(fileobj.filename)
+        })
+    else:
+        return jsonify({'msg': 'please post the data'}), 405
+
+@app.route('/oupload/', methods=['POST', 'GET'])
+def oupload():
+    """
+    上传文件到 Imgur
+    """
+    if request.method == 'POST':
+        fileobj = request.files['mypic']
+        with open('/test.png') as fileobj:
+            fileobj.save(os.path.join('/down/', fileobj.filename))
+            os.system('imguru /down/' + filename + ' > /log.log')
+        with open('/log.log') as f:
+            line = f.readline().strip()
+
+        return jsonify({
+            'url': line
         })
     else:
         return jsonify({'msg': 'please post the data'}), 405
