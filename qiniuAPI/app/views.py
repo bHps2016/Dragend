@@ -28,11 +28,10 @@ def upload():
     上传文件到七牛
     """
     if request.method == 'POST':
-        # 配置项
-        fileobj = request.files['files']  # fileobj待定
-        # if file and allowed_file(file.filename, form.filename.data):
-        # 七牛文件上传
-        qiniu.save(fileobj) # 保存文件到七牛
-        return jsonify({}), 200
+        fileobj = request.files['mypic']
+        qiniu.save(fileobj, fileobj.filename)
+        return jsonify({
+            'url': qiniu.url(fileobj.filename)
+        })
     else:
         return jsonify({'msg': 'please post the data'}), 405
